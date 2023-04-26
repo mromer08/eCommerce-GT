@@ -10,9 +10,6 @@
   "keywords": [],
   "author": "Manuel Rojas",
   "license": "ISC",
-  "engines": {
-    "node": "18.x"
-  },
   "devDependencies": {
     "nodemon": "^2.0.22"
   },
@@ -24,6 +21,7 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
-    "mongoose": "^7.0.5"
+    "mongoose": "^7.0.5",
+    "uuid": "^9.0.0"
   }
 }
