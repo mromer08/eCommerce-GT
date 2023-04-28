@@ -3,10 +3,8 @@ import ProductsList from "../components/ProductsList";
 function Index() {
   return (
     <>
-      <NavBar></NavBar>
-      <ProductsList>
-
-      </ProductsList>
+      <NavBar/>
+      <ProductsList/>
     </>
   );
 }
