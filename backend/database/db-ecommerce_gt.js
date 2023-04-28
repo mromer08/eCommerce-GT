@@ -12,7 +12,6 @@ db.users.insertOne({
 
 //Collections
 User = {
-  email,
   username,
   firstname,
   lastname,
