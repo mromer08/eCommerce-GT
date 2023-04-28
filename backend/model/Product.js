@@ -18,27 +18,21 @@ const productSchema = new Schema({
     type: Number,
     required: true,
   },
-  tags: {
-    tech: Number,
-    home: Number,
-    academic: Number,
-    literature: Number,
-    literature: Number,
-    decoration: Number,
-    others: Number
-  },
+  tags: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Tag",
+    },
+  ],
   amount: {
     type: Number,
-    default: 1
+    default: 1,
   },
-  state: {
-    accepted: Boolean,
-    rejected: Boolean,
-    inReview: {
-        type: Boolean,
-        default: true
-    }
-  }
+  status: {
+    type: String,
+    enum: ["accepted", "rejected", "inReview"],
+    default: "inReview",
+  },
 });
 
 module.exports = mongoose.model("Product", productSchema);

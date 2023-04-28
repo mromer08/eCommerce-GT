@@ -35,6 +35,9 @@ app.use(express.json());
 //middleware for cookies
 app.use(cookieParser());
 
+//serve static files
+app.use('/', express.static(path.join(__dirname, '/public')));
+
 // routes
 app.use('/api/register', require('./routes/register'));
 app.use('/api/auth', require('./routes/auth'));
@@ -42,7 +45,7 @@ app.use('/api/refresh', require('./routes/refresh'));
 app.use('/api/logout', require('./routes/logout'));
 
 app.use(verifyJWT);
-app.use('/api/users', require('./routes/api/users'));
+app.use('/api/users', require('./routes/api/users.routes'));
 
 app.all('*', (req, res) => {
     res.status(404);
