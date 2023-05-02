@@ -11,8 +11,7 @@ const productSchema = new Schema({
     required: true,
   },
   image: {
-    type: String,
-    default: "hola",
+    type: String
   },
   price: {
     type: Number,
@@ -33,6 +32,10 @@ const productSchema = new Schema({
     enum: ["accepted", "rejected", "inReview"],
     default: "inReview",
   },
+  user: {
+    type: Schema.Types.ObjectId,
+    required: true
+  }
 });
 
 module.exports = mongoose.model("Product", productSchema);

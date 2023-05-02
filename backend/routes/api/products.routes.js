@@ -1,20 +1,17 @@
 const express = require("express");
 const router = express.Router();
 const productController = require("../../controllers/productsController");
-// const verifyRoles = require('../../middleware/verifyRoles');
-const multer = require("multer");
+const ROLES_LIST = require('../../config/roles_list');
+const uploadImage = require("../../middleware/upload");
+const verifyRoles = require("../../middleware/verifyRoles");
 
-const storage = multer.diskStorage({
-  destination: path.join(__dirname, "../../public/images"),
-  filename: (req, file, cb) => {
-    cb(null, Date.now()-file.originalname);
-  },
-});
-const uploadImage = multer({
-  storage,
-  limits: { fileSize: 1000000 },
-}).single("image");
+// router.post("/", uploadImage, productController.createNewProduct);
+router
+  .route("/")
+  .get(productController.getAllProducts)
+  .post([verifyRoles(ROLES_LIST.User), uploadImage], productController.createNewProduct)
+  .put([verifyRoles(ROLES_LIST.User), uploadImage], productController.updateProduct)
+  .delete(verifyRoles(ROLES_LIST.User, ROLES_LIST.Admin), productController.deleteProduct);
 
-router.post("/", uploadImage, productController.createNewProduct);
-
+router.route("/:id").get(productController.getProduct);
 module.exports = router;
