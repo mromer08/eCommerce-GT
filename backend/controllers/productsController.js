@@ -1,5 +1,6 @@
 const Product = require("../model/Product");
 const path = require('path');
+const ROLES_LIST = require('../config/roles_list');
 const { unlink } = require("fs-extra");
 
 const getAllProducts = async (req, res) => {
@@ -59,7 +60,10 @@ const updateProduct = async (req, res) => {
       .status(204)
       .json({ message: `No product matches ID ${req.body.id}.` });
   }
-  if (product.user !== req.userId) {
+  console.log(product.user);
+  console.log(req.userId);
+  console.log(!req.roles.includes(ROLES_LIST.Admin)) //verify if its correct
+  if (!req.roles.includes(ROLES_LIST.Admin) || product.user.toString() !== req.userId.toString()) {
     return res
       .status(401)
       .json({ message: `You cannot update someone else's product` });
