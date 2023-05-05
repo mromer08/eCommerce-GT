@@ -17,10 +17,10 @@ const productSchema = new Schema({
     type: Number,
     required: true,
   },
-  tags: [
+  categories: [
     {
       type: Schema.Types.ObjectId,
-      ref: "Tag",
+      ref: "Category",
     },
   ],
   amount: {

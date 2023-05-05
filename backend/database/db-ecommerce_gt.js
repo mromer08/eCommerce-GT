@@ -1,5 +1,5 @@
 // use ecommerce_gt;
-
+const { faker } = require('@faker-js/faker/locale/es_MX');
 const usersPassword =
   "$2b$10$pQZaTlg0z1zXcOVP.wJ.s.luAmm3yhf2GKvqELapV2xidemCIyIZu";
 let result = db.tags.insertMany([
@@ -112,31 +112,31 @@ const normalUsers = Object.values(result.insertedIds);
 
 result = db.products.insertMany([
   {
-    name: 'producto 1',
-    description: 'super descripcion',
-    image: 'images/none.png',
-    price: 100,
-    tags: [tags[1], tags[0]],
+    name: 'Apple iPad (9th Generation)',
+    description: 'Se parte de la nueva etapa en la evolución, gracias el Moto g22, un dispositivo diseñado para acompañarte en tus actividades diarias, ya que viene con una súper pantalla de 6.5”, con una tasa de refresco de 90Hz, un sistema de cámara cuádruple de 50MP y cuenta con una interfaz rediseñada y una seguridad mejorada, gracias a Android 12.',
+    image: 'https://www.max.com.gt/media/catalog/product/cache/40cff66e483d5074b1ae49efef994171/m/o/motog22b.png',
+    price: 1399.00,
+    categories: [tags[0]],
     amount: 5,
     status: 'accepted',
     user: normalUsers[0]
   },
   {
-    name: 'producto 2',
-    description: 'super descripcion',
-    image: 'images/none.png',
+    name: 'Samsung Galaxy Z Flip4 5G, Liberado (Gris)',
+    description: 'Pequeño pero poderoso cuando se pliega, el Galaxy Z Flip4 es un teléfono inteligente compacto y con el tamaño justo para deslizarse en el bolsillo, cuenta con una pantalla de 6,7 pulgadas, despliega una hermosa vista gracias al vidrio Ultra Thin Glass, además ya no debes preocuparte por el agua. Este es el primer teléfono inteligente plegable resistente al agua del mundo.',
+    image: 'https://www.max.com.gt/media/catalog/product/cache/40cff66e483d5074b1ae49efef994171/s/m/smf721bza.jpg',
     price: 100,
-    tags: [tags[1], tags[0]],
+    categories: [tags[0]],
     amount: 5,
     status: 'accepted',
     user: normalUsers[0]
   },
   {
-    name: 'producto 3',
-    description: 'super descripcion',
-    image: 'images/none.png',
+    name: 'Samsung Galaxy Z Flip4 5G, Liberado (Gris)',
+    description: 'Pequeño pero poderoso cuando se pliega, el Galaxy Z Flip4 es un teléfono inteligente compacto y con el tamaño justo para deslizarse en el bolsillo, cuenta con una pantalla de 6,7 pulgadas, despliega una hermosa vista gracias al vidrio Ultra Thin Glass, además ya no debes preocuparte por el agua. Este es el primer teléfono inteligente plegable resistente al agua del mundo.',
+    image: 'https://www.max.com.gt/media/catalog/product/cache/40cff66e483d5074b1ae49efef994171/s/m/smf721bza.jpg',
     price: 100,
-    tags: [tags[1], tags[0]],
+    categories: [tags[0]],
     amount: 5,
     status: 'accepted',
     user: normalUsers[0]
