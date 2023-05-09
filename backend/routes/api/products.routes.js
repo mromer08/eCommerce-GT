@@ -11,8 +11,9 @@ router
   .route("/")
   .get(productController.getAllProducts)
   .post([verifyJWT, verifyRoles(ROLES_LIST.User), uploadImage], productController.createNewProduct)
-  .put([verifyJWT, verifyRoles(ROLES_LIST.User), uploadImage], productController.updateProduct)
+  .put([verifyJWT, verifyRoles(ROLES_LIST.User, ROLES_LIST.Delivery), uploadImage], productController.updateProduct)
   .delete([verifyJWT, verifyRoles(ROLES_LIST.User, ROLES_LIST.Admin)], productController.deleteProduct);
 
-router.route("/:id").get(productController.getProduct);
+  router.route("/:id").get(productController.getProduct);
+  router.route("/user/:username").get(productController.getProductsByUser);
 module.exports = router;
