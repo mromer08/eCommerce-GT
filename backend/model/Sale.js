@@ -26,11 +26,6 @@ const saleSchema = new Schema({
     ref: "Order",
     required: true,
   },
-  creditCard: {
-    type: Schema.Types.ObjectId,
-    ref: "CreditCard",
-    required: true,
-  },
 });
 
 module.exports = mongoose.model("Sale", saleSchema);
