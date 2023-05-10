@@ -6,7 +6,7 @@ const { unlink } = require("fs-extra");
 
 const getAllProducts = async (req, res) => {
   try {
-    const products = await Product.find({ status: "accepted" })
+    const products = await Product.find({  })
       .populate("user", {
         firstname: 1,
         lastname: 1,
@@ -48,6 +48,7 @@ const getProductsByUser = async (req, res) => {
 };
 
 const createNewProduct = async (req, res) => {
+  console.log(req.file)
   if (
     !req?.body?.name ||
     !req?.body?.description ||
