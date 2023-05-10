@@ -9,9 +9,11 @@ function ProductForm({
     name: "",
     description: "",
     amount: 1,
-    category: "other",
+    category: "",
   },
 }) {
+  const {createNewProduct} = useProducts();
+  const {categories} = useCategories();
   const {
     register,
     handleSubmit,
@@ -22,11 +24,9 @@ function ProductForm({
       description: edit.description,
       price: edit.price,
       amount: edit.amount,
-      category: edit.category,
+      category: categories[categories.length-1],
     },
   });
-  const {createNewProduct} = useProducts();
-  const {categories} = useCategories();
   const onSubmit = (data) => {
     data.image = data.image[0];
     createNewProduct(data);
@@ -56,7 +56,7 @@ function ProductForm({
                     <input
                       id="name"
                       type="text"
-                      {...register("name")}
+                      {...register("name", {required: true})}
                       className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
                   </div>
@@ -74,7 +74,7 @@ function ProductForm({
                       id="desciption"
                       name="desciption"
                       rows={3}
-                      {...register("description")}
+                      {...register("description", {required: true})}
                       className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
                   </div>
@@ -91,7 +91,7 @@ function ProductForm({
                     <input
                       type="number"
                       id="price"
-                      {...register("price")}
+                      {...register("price", {required: true})}
                       className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
                   </div>
@@ -108,7 +108,7 @@ function ProductForm({
                     <input
                       type="number"
                       id="amount"
-                      {...register("amount")}
+                      {...register("amount", {required: true})}
                       className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
                   </div>
@@ -124,7 +124,7 @@ function ProductForm({
                   <div className="mt-2">
                     <select
                       id="tag"
-                      {...register("category")}
+                      {...register("category", {required: true})}
                       className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                     >
                       {categories.map(category => 

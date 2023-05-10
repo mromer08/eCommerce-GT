@@ -1,10 +1,11 @@
 const CreditCard = require("../model/CreditCard");
 const bcrypt = require("bcrypt");
+const User = require("../model/User");
 
 const getAllCreditCards = async (req, res) => {
   // all the credit cards by a user
-  const user = await CreditCard.exist({ username: req.user });
-  const creditCard = await CreditCard.find({ user });
+  const user = await User.exists({ username: req.user });
+  const creditCard = await CreditCard.find({ user: user });
   if (!creditCard)
     return res.status(204).json({ message: "No credit card found" });
   res.json(creditCard);
@@ -31,7 +32,7 @@ const createNewCreditCard = async (req, res) => {
       holderName,
       lastDigits,
       number: hashedNumber,
-      expirationDate,
+      expirationDate: new Date(expirationDate),
       cvcCode: hashedCvc,
       user: req.userId,
     });

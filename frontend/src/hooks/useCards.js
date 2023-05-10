@@ -1,24 +1,52 @@
 import { useEffect, useState } from "react";
-import axios from "../api/axios";
+import useAxiosPrivate from "./useAxiosPrivate";
 
-const CATEGORIES_URL = "/api/categories";
-const useCategories = () => {
-  const [categories, setCategories] = useState([]);
+const CARDS_URL = "/api/cards";
+const useCards = () => {
+  const axiosPrivate = useAxiosPrivate();
+  const [cards, setCards] = useState([]);
 
-  const getAllCategories = () => {
-    axios
-      .get(CATEGORIES_URL)
-      .then((res) => setCategories(res.data))
+  const getAllCards = () => {
+    axiosPrivate
+      .get(CARDS_URL)
+      .then((res) => setCards(res.data))
       .catch((err) => console.log(err));
   };
 
+  const createNewCard = (card) => {
+    console.log(card);
+    axiosPrivate
+      .post(CARDS_URL, card)
+      .then((res) => {
+        getAllCards();
+        return res.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  const deleteCard = async (id) => {
+    axiosPrivate
+      .delete(CARDS_URL, { data: { id } })
+      .then((res) => {
+        getAllCards();
+        return res.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   useEffect(() => {
-    getAllCategories();
+    getAllCards();
   }, []);
 
   return {
-    categories
+    cards,
+    createNewCard,
+    deleteCard
   };
 };
 
-export default useCategories;
+export default useCards;

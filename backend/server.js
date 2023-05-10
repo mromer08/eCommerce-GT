@@ -48,7 +48,7 @@ app.use('/api/products', require('./routes/api/products.routes'));
 
 app.use(verifyJWT);
 app.use('/api/users', require('./routes/api/users.routes'));
-app.use('/api/profile/cards', require('./routes/api/users.routes'));
+app.use('/api/cards', require('./routes/api/creditCards.routes'));
 
 app.all('*', (req, res) => {
     res.status(404);

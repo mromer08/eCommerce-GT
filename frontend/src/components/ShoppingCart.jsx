@@ -143,12 +143,12 @@ export default function ShoppingCart() {
                           </p>
                         </div>
                         <div className="mt-6">
-                          <a
-                            href="#"
+                          <Link
+                            to={cart.length > 0 ? '/cards' : '/'}
                             className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
                           >
-                            Pagar
-                          </a>
+                            Ir a Pago
+                          </Link>
                         </div>
                         <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                           <p>

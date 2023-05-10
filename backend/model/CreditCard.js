@@ -19,7 +19,7 @@ const creditCardShema = new Schema({
     required: true,
   },
   cvcCode: {
-    type: Date,
+    type: String,
     required: true,
   },
   user: {

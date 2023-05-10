@@ -29,8 +29,7 @@ function App() {
         {/* public routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/cards" element={<CreditCardList />} />
-        <Route element={<NavBarLayout/>}>
+        <Route element={<NavBarLayout />}>
           <Route path="/" element={<ProductsList />} />
           <Route path="/product/:id" element={<ProductOverview />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
@@ -38,6 +37,7 @@ function App() {
           {/* we want to protect these routes */}
           <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
             <Route path="/product-form" element={<ProductForm />} />
+            <Route path="/cards" element={<CreditCardList />} />
             <Route path="/home" element={<Home />} />
           </Route>
 
