@@ -5,12 +5,12 @@ import {
   UserCircleIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthProvider";
 import ShoppingCart from "./ShoppingCart";
 
 const navigation = [
-  { name: "Dashboard", href: "#", current: true },
+  { name: "New Product", href: "/product-form", current: true },
   { name: "Team", href: "#", current: false },
   { name: "Projects", href: "#", current: false },
   { name: "Calendar", href: "#", current: false },
@@ -48,7 +48,7 @@ export default function NavBar() {
                 </Disclosure.Button>
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-                <Link to={"/"} className="flex flex-shrink-0 items-center">
+                <NavLink to={"/"} className="flex flex-shrink-0 items-center">
                   <img
                     className="block h-8 w-auto lg:hidden"
                     src="/gt.png"
@@ -62,13 +62,13 @@ export default function NavBar() {
                   <h1 className="text-center text-2xl font-bold leading-9 tracking-tight text-white">
                     eCommerce GT
                   </h1>
-                </Link>
+                </NavLink>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
                     {navigation.map((item) => (
-                      <a
+                      <Link
                         key={item.name}
-                        href={item.href}
+                        to={item.href}
                         className={classNames(
                           item.current
                             ? "bg-gray-900 text-white"
@@ -78,7 +78,7 @@ export default function NavBar() {
                         aria-current={item.current ? "page" : undefined}
                       >
                         {item.name}
-                      </a>
+                      </Link>
                     ))}
                   </div>
                 </div>

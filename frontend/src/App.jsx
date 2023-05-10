@@ -14,6 +14,7 @@ import ProductOverview from "./components/ProductOverview";
 import ProductsList from "./components/ProductsList";
 import NavBarLayout from "./layouts/NavBar";
 import ProductForm from "./components/ProductForm";
+import CreditCardList from "./components/CreditCardList";
 
 const ROLES = {
   User: 2000,
@@ -26,17 +27,18 @@ function App() {
     <Routes>
       <Route path="/" element={<Layout />}>
         {/* public routes */}
-        <Route path="login" element={<Login />} />
-        <Route path="register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/cards" element={<CreditCardList />} />
         <Route element={<NavBarLayout/>}>
           <Route path="/" element={<ProductsList />} />
-          <Route path="product/:id" element={<ProductOverview />} />
-          <Route path="unauthorized" element={<Unauthorized />} />
+          <Route path="/product/:id" element={<ProductOverview />} />
+          <Route path="/unauthorized" element={<Unauthorized />} />
 
           {/* we want to protect these routes */}
           <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
-            <Route path="/home" element={<Home />} />
             <Route path="/product-form" element={<ProductForm />} />
+            <Route path="/home" element={<Home />} />
           </Route>
 
           <Route element={<RequireAuth allowedRoles={[ROLES.Delivery]} />}>

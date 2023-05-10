@@ -10,12 +10,12 @@ import {
   ShoppingCartIcon,
   PencilSquareIcon,
 } from "@heroicons/react/20/solid";
-export default function ProductItem({ product }) {
+export default function ProductItem({ product, deleteProduct }) {
   const { auth } = useAuth();
   const { addToCart } = useCart();
   return (
     <div className="group bg-white p-3 rounded-xl flex flex-col">
-      <Link to={`/product/${product._id}`}>
+      <Link to={`/product/${product._id}` }>
         <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
           <img
             src={`${BASE_URL + product.image}`}

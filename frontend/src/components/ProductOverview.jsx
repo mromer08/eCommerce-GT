@@ -32,29 +32,27 @@ import AuthContext from "../context/AuthProvider";
 import { useContext, useEffect, useState } from "react";
 import StatusProduct from "./StatusProduct";
 import { useCart } from "../hooks/useCart";
+import useProducts from "../hooks/useProducts";
 
 export default function ProductOverview() {
   const {addToCart} = useCart();
   const { id } = useParams();
+  const { getProduct } = useProducts();
+  const { auth } = useContext(AuthContext);
   const [product, setProduct] = useState(null);
-  const getProduct = async () => {
-    const res = await axios.get(`api/products/${id}`);
-    return res.data;
-  };
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const productData = await getProduct();
+        const productData = await getProduct(id);
         setProduct(productData);
-        console.log(productData);
       } catch (error) {
         console.log(error);
       }
     };
+
     fetchProduct();
   }, []);
-  const { auth } = useContext(AuthContext);
   return !product ? (
     <h1>No se encontró el producto que busca</h1>
   ) : (
