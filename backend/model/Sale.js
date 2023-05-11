@@ -14,17 +14,16 @@ const saleSchema = new Schema({
   },
   products: [
     {
-      info: {
+      product: {
         type: Schema.Types.ObjectId,
         ref: "Product",
       },
-      amount: Number,
+      quantity: Number,
     },
   ],
   order: {
     type: Schema.Types.ObjectId,
     ref: "Order",
-    required: true,
   },
 });
 

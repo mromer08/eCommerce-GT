@@ -11,7 +11,7 @@ import ShoppingCart from "./ShoppingCart";
 
 const navigation = [
   { name: "New Product", href: "/product-form", current: true },
-  { name: "Team", href: "#", current: false },
+  { name: "Orders", href: "/orders", current: false },
   { name: "Projects", href: "#", current: false },
   { name: "Calendar", href: "#", current: false },
 ];

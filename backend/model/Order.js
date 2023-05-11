@@ -7,7 +7,10 @@ const orderSchema = new Schema({
     ref: "Sale",
     required: true,
   },
-  isComplete: Boolean,
+  isComplete: {
+    type: Boolean,
+    default: false,
+  },
   user: {
     type: Schema.Types.ObjectId,
     ref: "User",

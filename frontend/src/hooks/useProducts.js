@@ -16,20 +16,45 @@ const useProducts = () => {
 
   const createNewProduct = (product) => {
     const formData = new FormData();
-    
+
     for (let key in product) {
-        formData.append(key, product[key]);
+      formData.append(key, product[key]);
     }
-    console.log(product)
-    console.log('desde el reactt');
-  
+    console.log(product);
+    console.log("desde el reactt");
+
     axiosPrivate
       .post(PRODUCTS_URL, formData, {
-        headers:{
-            'Content-Type': 'multipart/form-data'
-        }
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       })
       .then((response) => {
+        getAllProducts();
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const updateProduct = (product) => {
+    const formData = new FormData();
+
+    for (let key in product) {
+      formData.append(key, product[key]);
+    }
+    console.log(product);
+    console.log("desde el reactt vupdate");
+
+    axiosPrivate
+      .put(PRODUCTS_URL, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        getAllProducts();
         console.log(response.data);
       })
       .catch((error) => {
@@ -71,6 +96,7 @@ const useProducts = () => {
     getProduct,
     deleteProduct,
     createNewProduct,
+    updateProduct
   };
 };
 

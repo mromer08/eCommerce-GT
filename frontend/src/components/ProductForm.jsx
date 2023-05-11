@@ -3,6 +3,8 @@ import { PhotoIcon } from "@heroicons/react/24/solid";
 import { useForm } from "react-hook-form";
 import useProducts from "../hooks/useProducts";
 import useCategories from "../hooks/useCategories";
+import { BASE_URL } from "../api/axios";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function ProductForm({
   edit = {
@@ -10,13 +12,17 @@ function ProductForm({
     description: "",
     amount: 1,
     category: "",
-  },
+  }, setEdit
 }) {
-  const {createNewProduct} = useProducts();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+  const {createNewProduct, updateProduct} = useProducts();
   const {categories} = useCategories();
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -24,12 +30,23 @@ function ProductForm({
       description: edit.description,
       price: edit.price,
       amount: edit.amount,
-      category: categories[categories.length-1],
+      category: edit.category,
     },
   });
   const onSubmit = (data) => {
-    data.image = data.image[0];
-    createNewProduct(data);
+    if (data.image) {
+      data.image = data.image[0];
+    }
+    if (edit._id) {
+      data.id = edit._id
+      updateProduct(data)
+      setEdit({})
+
+    }else{
+      createNewProduct(data);
+      
+    }
+    navigate(from, { replace: true });
   };
 
   return (
@@ -40,7 +57,7 @@ function ProductForm({
             <div>
               <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                 <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-                  {edit.id ? "Editar" : "Nuevo"} producto
+                  {edit._id ? "Editar" : "Nuevo"} producto
                 </h2>
               </div>
 
@@ -134,43 +151,49 @@ function ProductForm({
                     </select>
                   </div>
                 </div>
-
-                <div className="col-span-full">
-                  <label
-                    htmlFor="cover-photo"
-                    className="block text-sm font-medium leading-6 text-gray-900"
-                  >
-                    Imágen
-                  </label>
-                  <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                    <div className="text-center">
-                      <PhotoIcon
-                        className="mx-auto h-12 w-12 text-gray-300"
-                        aria-hidden="true"
-                      />
-                      <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                        <label
-                          htmlFor="image"
-                          className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
-                        >
-                          <input
-                            id="image"
-                            type="file"
-                            {...register("image")}
-                          />
-                        </label>
-                      </div>
-                      <p className="text-xs leading-5 text-gray-600">
-                        PNG, JPG, GIF hasta 1MB
-                      </p>
-                    </div>
+                
+                {edit.image ? (
+                  <div className="col-span-full">
+                    <img src={`${BASE_URL}/${edit.image}`} alt={edit.name} />
                   </div>
-                </div>
+                ): (
+                                  <div className="col-span-full">
+                                  <label
+                                    htmlFor="cover-photo"
+                                    className="block text-sm font-medium leading-6 text-gray-900"
+                                  >
+                                    Imágen
+                                  </label>
+                                  <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+                                    <div className="text-center">
+                                      <PhotoIcon
+                                        className="mx-auto h-12 w-12 text-gray-300"
+                                        aria-hidden="true"
+                                      />
+                                      <div className="mt-4 flex text-sm leading-6 text-gray-600">
+                                        <label
+                                          htmlFor="image"
+                                          className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                                        >
+                                          <input
+                                            id="image"
+                                            type="file"
+                                            {...register("image")}
+                                          />
+                                        </label>
+                                      </div>
+                                      <p className="text-xs leading-5 text-gray-600">
+                                        PNG, JPG, GIF hasta 1MB
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                )}
               </div>
             </div>
             <div>
               <button className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                {edit.id ? "Editar" : "Crear"} producto
+                {edit._id ? "Editar" : "Crear"} producto
               </button>
             </div>
           </div>

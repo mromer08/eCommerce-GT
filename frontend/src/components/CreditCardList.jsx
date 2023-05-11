@@ -6,12 +6,17 @@ import {
 } from "@heroicons/react/24/outline";
 import CreditCardForm from "./CreditCardForm";
 import useCards from "../hooks/useCards";
+import { useCart } from "../hooks/useCart";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import { useNavigate } from "react-router-dom";
 
 export default function CreditCardList() {
-  const {cards, createNewCard, deleteCard} = useCards();
-
+  const { cards, createNewCard, deleteCard } = useCards();
+  const { clearCart, cart } = useCart();
   const [selectedCard, setSelectedCard] = useState(null);
   const [showAddCardForm, setShowAddCardForm] = useState(false);
+  const axiosPrivate = useAxiosPrivate();
+  const navigate = useNavigate();
 
   const handleCardSelection = (card) => {
     setSelectedCard(card);
@@ -23,10 +28,29 @@ export default function CreditCardList() {
     setShowAddCardForm(true);
   };
 
+  const createNewSale = (sale) => {
+    axiosPrivate
+      .post("/api/sales", sale)
+      .then((res) => {
+        return res.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   const handlePayment = () => {
     if (selectedCard) {
-      // Aquí puedes realizar la lógica de enviar la tarjeta seleccionada al servidor para el pago
-      console.log("Tarjeta seleccionada:", selectedCard);
+      const total = cart.reduce(
+        (acc, curr) => acc + curr.price * curr.quantity,
+        0
+      );
+      const transformedArr = cart.map(({ _id, quantity }) => ({
+        product: _id,
+        quantity,
+      }));
+      createNewSale({ products: transformedArr, total, card: selectedCard });
+      clearCart();
+      navigate('/')
     }
   };
 
@@ -115,7 +139,7 @@ export default function CreditCardList() {
           >
             Pagar
           </button>
-          {showAddCardForm && <CreditCardForm createNewCard={createNewCard}/>}
+          {showAddCardForm && <CreditCardForm createNewCard={createNewCard} />}
         </div>
       </div>
     </div>

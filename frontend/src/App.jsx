@@ -15,8 +15,9 @@ import ProductsList from "./components/ProductsList";
 import NavBarLayout from "./layouts/NavBar";
 import ProductForm from "./components/ProductForm";
 import CreditCardList from "./components/CreditCardList";
+import OrderList from "./components/OrderList";
 
-const ROLES = {
+export const ROLES = {
   User: 2000,
   Delivery: 1580,
   Admin: 5002,
@@ -37,12 +38,13 @@ function App() {
           {/* we want to protect these routes */}
           <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
             <Route path="/product-form" element={<ProductForm />} />
+            <Route path="/profile/products" element={<ProductsList role={ROLES.User} />} />
             <Route path="/cards" element={<CreditCardList />} />
             <Route path="/home" element={<Home />} />
           </Route>
 
-          <Route element={<RequireAuth allowedRoles={[ROLES.Delivery]} />}>
-            <Route path="editor" element={<Editor />} />
+          <Route element={<RequireAuth allowedRoles={[ROLES.Delivery, ROLES.User]} />}>
+            <Route path="/orders" element={<OrderList />} />
           </Route>
 
           <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>

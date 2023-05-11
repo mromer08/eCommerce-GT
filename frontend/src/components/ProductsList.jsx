@@ -3,11 +3,15 @@ import axios, { BASE_URL } from "../api/axios";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import ProductItem from "./ProductItem";
 import useProducts from "../hooks/useProducts";
+import ProductForm from "./ProductForm";
 
 const PRODUCTS_URL = "/api/products";
 export default function ProductsList() {
-  const { products, deleteProduct } = useProducts();
-
+  const { products, deleteProduct, updateProduct } = useProducts();
+  const [edit, setEdit] = useState({});
+  if (edit._id) {
+    return <ProductForm edit={edit} setEdit={setEdit}/>
+  }
   return (
     <div className="bg-gray-100 h-full">
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
@@ -19,6 +23,8 @@ export default function ProductsList() {
               key={product._id}
               product={product}
               deleteProduct={deleteProduct}
+              updateProduct={updateProduct}
+              setEdit={setEdit}
             />
           ))}
         </div>
