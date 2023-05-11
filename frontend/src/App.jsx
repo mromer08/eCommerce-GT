@@ -1,21 +1,19 @@
 import Register from "./components/Register";
 import Login from "./components/Login";
-import Home from "./components/Home";
 import Layout from "./components/Layout";
-import Editor from "./components/Editor";
 import Admin from "./components/Admin";
 import Missing from "./components/Missing";
 import Unauthorized from "./components/Unauthorized";
 import Lounge from "./components/Lounge";
-import LinkPage from "./components/LinkPage";
 import RequireAuth from "./components/RequireAuth";
-import { Routes, Route, Router } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import ProductOverview from "./components/ProductOverview";
 import ProductsList from "./components/ProductsList";
 import NavBarLayout from "./layouts/NavBar";
 import ProductForm from "./components/ProductForm";
 import CreditCardList from "./components/CreditCardList";
 import OrderList from "./components/OrderList";
+import Users from "./components/Users";
 
 export const ROLES = {
   User: 2000,
@@ -38,9 +36,8 @@ function App() {
           {/* we want to protect these routes */}
           <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
             <Route path="/product-form" element={<ProductForm />} />
-            <Route path="/profile/products" element={<ProductsList role={ROLES.User} />} />
+            <Route path="/profile/products" element={<ProductsList profile={true} />} />
             <Route path="/cards" element={<CreditCardList />} />
-            <Route path="/home" element={<Home />} />
           </Route>
 
           <Route element={<RequireAuth allowedRoles={[ROLES.Delivery, ROLES.User]} />}>
@@ -48,7 +45,7 @@ function App() {
           </Route>
 
           <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
-            <Route path="admin" element={<Admin />} />
+            <Route path="/users" element={<Users />} />
           </Route>
 
           <Route

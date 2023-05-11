@@ -8,13 +8,9 @@ import {
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthProvider";
 import ShoppingCart from "./ShoppingCart";
+import { ROLES } from "../App";
 
-const navigation = [
-  { name: "New Product", href: "/product-form", current: true },
-  { name: "Orders", href: "/orders", current: false },
-  { name: "Projects", href: "#", current: false },
-  { name: "Calendar", href: "#", current: false },
-];
+let navigation = [];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -23,6 +19,44 @@ function classNames(...classes) {
 export default function NavBar() {
   const { auth, setAuth } = useContext(AuthContext);
   const navigate = useNavigate();
+  if (auth?.roles?.includes(ROLES.Admin)) {
+    navigation = []
+    navigation.push(
+      { name: "Crear Usuario", href: "/new-employee", current: false },
+      { name: "Usuarios", href: "/users", current: false },
+      { name: "Reportes", href: "#", current: false },
+    );
+  }else
+  if (auth?.roles?.includes(ROLES.Delivery)) {
+    navigation = []
+    // Opción adicional para el rol de entrega
+    navigation.push({
+      name: "Productos",
+      href: "/",
+      current: false,
+    }, {
+      name: "Pedidos",
+      href: "/orders",
+      current: false,
+    });
+  }else
+  if (auth?.roles?.includes(ROLES.User)) {
+    navigation = []
+    // Opción adicional para el rol de entrega
+    navigation.push({
+      name: "Nuevo Producto",
+      href: "/product-form",
+      current: false,
+    },{
+      name: "Mis Productos",
+      href: "/profile/products",
+      current: false,
+    }, {
+      name: "Mis Pedidos",
+      href: "/orders",
+      current: false,
+    });
+  }
 
   const logout = async () => {
     // if used in more components, this should be in context
@@ -152,7 +186,7 @@ export default function NavBar() {
                     </Menu.Items>
                   </Transition>
                 </Menu>
-                <ShoppingCart/>
+                <ShoppingCart />
               </div>
             </div>
           </div>

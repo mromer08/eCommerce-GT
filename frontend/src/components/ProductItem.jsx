@@ -12,6 +12,7 @@ import {
   PencilSquareIcon,
   CheckCircleIcon,
   XCircleIcon,
+  MinusCircleIcon,
 } from "@heroicons/react/20/solid";
 export default function ProductItem({ product, deleteProduct, setEdit, updateProduct }) {
   const { auth } = useAuth();
@@ -29,7 +30,7 @@ export default function ProductItem({ product, deleteProduct, setEdit, updatePro
           />
         </div>
         <h3 className="mt-4 text-sm text-gray-700">{product.name}</h3>
-        <StatusProduct status={isProductOwner ? product.status : false} />
+        <StatusProduct status={(isProductOwner || isDeliveryMan) ? product.status : false} />
       </Link>
       <div className="flex justify-between mt-auto">
         <div className="text-lg font-medium text-gray-900">
@@ -43,6 +44,12 @@ export default function ProductItem({ product, deleteProduct, setEdit, updatePro
               onClick={() => updateProduct({id: product._id, status: 'accepted'})}
             >
               <CheckCircleIcon className="w-6 flex-shrink-0" />
+            </button>
+            <button
+              className="items-center justify-center rounded-md border border-transparent bg-amber-500 p-1 text-base font-medium text-white hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2"
+              onClick={() => updateProduct({id: product._id, status: 'inReview'})}
+            >
+              <MinusCircleIcon className="w-6 flex-shrink-0" />
             </button>
             <button
               onClick={() => updateProduct({id: product._id, status: 'rejected'})}

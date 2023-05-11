@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "../api/axios";
 import useAxiosPrivate from "./useAxiosPrivate";
+import useAuth from "./useAuth";
 
 const PRODUCTS_URL = "/api/products";
 const useProducts = () => {
@@ -10,7 +11,9 @@ const useProducts = () => {
   const getAllProducts = () => {
     axios
       .get(PRODUCTS_URL)
-      .then((res) => setProducts(res.data))
+      .then((res) => {
+        setProducts(res.data);
+      })
       .catch((err) => console.log(err));
   };
 
@@ -20,8 +23,6 @@ const useProducts = () => {
     for (let key in product) {
       formData.append(key, product[key]);
     }
-    console.log(product);
-    console.log("desde el reactt");
 
     axiosPrivate
       .post(PRODUCTS_URL, formData, {
@@ -44,8 +45,6 @@ const useProducts = () => {
     for (let key in product) {
       formData.append(key, product[key]);
     }
-    console.log(product);
-    console.log("desde el reactt vupdate");
 
     axiosPrivate
       .put(PRODUCTS_URL, formData, {
@@ -96,7 +95,7 @@ const useProducts = () => {
     getProduct,
     deleteProduct,
     createNewProduct,
-    updateProduct
+    updateProduct,
   };
 };
 
