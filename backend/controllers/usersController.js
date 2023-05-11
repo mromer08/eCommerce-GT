@@ -41,12 +41,11 @@ const updateUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
     if (!req?.body?.id) return res.status(400).json({ "message": 'User ID required' });
-    const user = await User.findOne({ _id: req.body.id }).exec();
+    const user = await User.findByIdAndDelete(req.body.id)
     if (!user) {
         return res.status(204).json({ 'message': `User ID ${req.body.id} not found` });
     }
-    const result = await user.deleteOne({ _id: req.body.id });
-    res.json(result);
+    res.json(user);
 }
 
 const getUser = async (req, res) => {
