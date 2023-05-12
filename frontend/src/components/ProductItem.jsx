@@ -18,7 +18,7 @@ export default function ProductItem({ product, deleteProduct, setEdit, updatePro
   const { auth } = useAuth();
   const { addToCart } = useCart();
   const isDeliveryMan = auth?.roles?.includes(ROLES.Delivery);
-  const isProductOwner = auth?.user === product.user.username;
+  const isProductOwner = auth?.user === product.user?.username;
   return (
     <div className="group bg-white p-3 rounded-xl flex flex-col">
       <Link to={`/product/${product._id}`}>

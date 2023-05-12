@@ -1,12 +1,14 @@
 import { useRef, useState, useEffect } from "react";
 import axios from "../api/axios";
 import { Link } from "react-router-dom";
+import { ROLES } from "../App";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/; //qwert12345M!
 const REGISTER_URL = "/api/register";
 
-const Register = () => {
+const Register = ({ admin = false }) => {
   const nameRef = useRef();
   const errRef = useRef();
 
@@ -14,6 +16,7 @@ const Register = () => {
   const [validName, setValidName] = useState(false);
   const [userFocus, setUserFocus] = useState(false);
 
+  const [rol, setRol] = useState("");
   const [pwd, setPwd] = useState("");
   const [validPwd, setValidPwd] = useState(false);
   const [pwdFocus, setPwdFocus] = useState(false);
@@ -27,6 +30,8 @@ const Register = () => {
 
   const [firstname, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
+
+  const axiosPrivate = useAxiosPrivate();
   useEffect(() => {
     nameRef.current.focus();
   }, []);
@@ -49,21 +54,45 @@ const Register = () => {
     // if button enabled with JS hack
     const v1 = USER_REGEX.test(user);
     const v2 = PWD_REGEX.test(pwd);
-    if (!v1 || !v2) {
-      setErrMsg("Invalid Entry");
-      return;
-    }
+    // if (!v1 || !v2) {
+    //   setErrMsg("Invalid Entry");
+    //   return;
+    // }
     try {
-      const response = await axios.post(
-        REGISTER_URL,
-        JSON.stringify({ username: user, password: pwd, firstname, lastname }),
-        {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
+      if (!admin) {
+        const response = await axios.post(
+          REGISTER_URL,
+          JSON.stringify({
+            username: user,
+            password: pwd,
+            firstname,
+            lastname,
+          }),
+          {
+            headers: { "Content-Type": "application/json" },
+            withCredentials: true,
+          }
+        );
+        console.log(JSON.stringify(response?.data));
+      } else {
+        const rolObj = {};
+        for (const key in ROLES) {
+          console.log(ROLES[key], rol);
+          if (ROLES[key].toString() === rol.toString()) {
+            rolObj[key] = Number(rol);
+          }
         }
-      );
+        const response = await axiosPrivate
+          .post("/api/users", {
+            username: user,
+            password: pwd,
+            firstname,
+            lastname,
+            roles: rolObj,
+          });
+          console.log(response?.data)
+      }
       // TODO: remove console.logs before deployment
-      console.log(JSON.stringify(response?.data));
       //console.log(JSON.stringify(response))
       setSuccess(true);
       //clear state and controlled inputs
@@ -97,7 +126,7 @@ const Register = () => {
               precio ✨
             </p>
             <Link
-              to={"/linkpage"}
+              to={"/login"}
               className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
               Iniciar Sesión
@@ -220,6 +249,31 @@ const Register = () => {
                         />
                       </div>
                     </div>
+
+                    {admin && (
+                      <div className="col-span-full">
+                        <label
+                          htmlFor="rol"
+                          className="block text-sm font-medium leading-6 text-gray-900"
+                        >
+                          Rol
+                        </label>
+                        <div className="mt-2">
+                          <select
+                            id="rol"
+                            name="rol"
+                            type="rol"
+                            autoComplete="off"
+                            onChange={(e) => setRol(e.target.value)}
+                            value={rol}
+                            className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                          >
+                            <option value={ROLES.Admin}>Admin</option>
+                            <option value={ROLES.Delivery}>Delivery</option>
+                          </select>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div>

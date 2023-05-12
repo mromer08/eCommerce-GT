@@ -1,11 +1,9 @@
-import useAuth from "../hooks/useAuth";
 import useUsers from "../hooks/useUsers";
 import UserItem from "./UserItem";
 
 export default function Users() {
 
     const {users, deleteUser} = useUsers();
-    const {auth} = useAuth();
   return (
     <div className="bg-gray-100 min-h-full">
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">

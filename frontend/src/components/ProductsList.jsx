@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ProductItem from "./ProductItem";
 import useProducts from "../hooks/useProducts";
 import ProductForm from "./ProductForm";
@@ -13,11 +13,11 @@ export default function ProductsList({profile = false}) {
     return <ProductForm edit={edit} setEdit={setEdit}/>
   }
   const filteredProducts = products.filter((product) => {
-    if (profile && auth?.user === product.user.username) {
+    if (profile && auth?.user === product.user?.username) {
       return true; // Mostrar todos los productos del usuario si el perfil está activado
-    }
+    }else
     if (
-      auth?.user !== product.user.username && (
+      !profile && auth?.user !== product.user?.username && (
       auth?.roles?.includes(ROLES.Delivery) ||
       (product.status === "accepted" && product.amount > 0)
     )) {

@@ -1,24 +1,3 @@
-/*
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    theme: {
-      extend: {
-        gridTemplateRows: {
-          '[auto,auto,1fr]': 'auto auto 1fr',
-        },
-      },
-    },
-    plugins: [
-      // ...
-      require('@tailwindcss/aspect-ratio'),
-    ],
-  }
-  ```
-*/
 import {
   TrashIcon,
   ShoppingCartIcon,
@@ -27,7 +6,7 @@ import {
 } from "@heroicons/react/20/solid";
 import { Link, useParams } from "react-router-dom";
 import { formatterPrice } from "../../utils/priceFormatter";
-import axios, { BASE_URL } from "../api/axios";
+import { BASE_URL } from "../api/axios";
 import AuthContext from "../context/AuthProvider";
 import { useContext, useEffect, useState } from "react";
 import StatusProduct from "./StatusProduct";
@@ -92,11 +71,11 @@ export default function ProductOverview() {
               <div className="mt-6">
                 <h2 className="text-xl font-bold">Información del vendedor</h2>
                 <Link
-                  to={`/user/${product.user.username}`}
+                  to={`/user/${product.user?.username}`}
                   className="flex text-xl text-gray-900"
                 >
                   <UserCircleIcon className="mr-5 w-7 flex-shrink-0" />
-                  {`${product.user.firstname} ${product.user.lastname}`}
+                  {`${product.user?.firstname} ${product.user?.lastname}`}
                 </Link>
               </div>
               <div className="mt-6">
@@ -106,7 +85,7 @@ export default function ProductOverview() {
             </div>
 
             <div className="flex mt-auto space-x-3">
-              {auth?.user === product.user.username ? (
+              {auth?.user === product.user?.username ? (
                 <>
                   <button
                     type="submit"

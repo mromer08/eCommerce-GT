@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { PhotoIcon } from "@heroicons/react/24/solid";
 import { useForm } from "react-hook-form";
 import useProducts from "../hooks/useProducts";

@@ -63,6 +63,7 @@ export default function NavBar() {
     // axios to /logout endpoint
     setAuth({});
     navigate("/");
+    navigation = []
   };
   return (
     <Disclosure as="nav" className="bg-gray-800">

@@ -46,6 +46,7 @@ function App() {
 
           <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
             <Route path="/users" element={<Users />} />
+            <Route path="/new-employee" element={<Register admin={true} />} />
           </Route>
 
           <Route

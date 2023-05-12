@@ -1,10 +1,5 @@
 import useAuth from "../hooks/useAuth";
-import StatusProduct from "./StatusProduct";
-import { BASE_URL } from "../api/axios";
 import { formatterPrice } from "../../utils/priceFormatter";
-import { Link } from "react-router-dom";
-import { useCart } from "../hooks/useCart";
-
 import { TruckIcon } from "@heroicons/react/20/solid";
 import { ROLES } from "../App";
 import { formatDistanceToNow } from "date-fns";
