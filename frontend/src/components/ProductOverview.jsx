@@ -14,7 +14,7 @@ import { useCart } from "../hooks/useCart";
 import useProducts from "../hooks/useProducts";
 
 export default function ProductOverview() {
-  const {addToCart} = useCart();
+  const { addToCart } = useCart();
   const { id } = useParams();
   const { getProduct } = useProducts();
   const { auth } = useContext(AuthContext);
@@ -56,7 +56,7 @@ export default function ProductOverview() {
                 {product.name}
               </h1>
               <div className="mt-6 space-x-2">
-                <StatusProduct status={product.status}/>
+                <StatusProduct status={product.status} />
                 <span className="bg-indigo-100 text-sm p-1 rounded-lg">
                   {product.category.name}
                 </span>
@@ -77,6 +77,14 @@ export default function ProductOverview() {
                   <UserCircleIcon className="mr-5 w-7 flex-shrink-0" />
                   {`${product.user?.firstname} ${product.user?.lastname}`}
                 </Link>
+              </div>
+              <div className="mt-6">
+                <h2 className="text-xl font-bold">Disponibilidad</h2>
+                <p className="text-base text-gray-900">
+                  {product.amount > 0
+                    ? `${product.amount} unidades disponibles`
+                    : `No disponible por ahora`}
+                </p>
               </div>
               <div className="mt-6">
                 <h2 className="text-xl font-bold">Descripción</h2>
@@ -103,6 +111,7 @@ export default function ProductOverview() {
                   </button>
                 </>
               ) : (
+                product.amount > 0 &&
                 <button
                   type="button"
                   onClick={() => addToCart(product)}

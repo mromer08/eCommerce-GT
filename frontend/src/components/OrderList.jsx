@@ -12,6 +12,7 @@ export default function orderList() {
         <h2 className="sr-only">Orders</h2>
 
         <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+        {orders.length === 0 && (<p>No hay pedidos para mostrar</p>)}
           {orders.map((order) => (
             <OrderItem
               key={order._id}
