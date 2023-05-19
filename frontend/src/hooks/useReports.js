@@ -3,7 +3,7 @@ import useAxiosPrivate from "./useAxiosPrivate";
 import { REPORTS } from "../App";
 
 const REPORT_URL = "/api/reports";
-const useReports = () => {
+const useReports = (type) => {
   const axiosPrivate = useAxiosPrivate();
   const [reports, setReports] = useState([]);
 
@@ -33,10 +33,18 @@ const useReports = () => {
       .then((res) => setReports(res.data))
       .catch((err) => console.log(err));
   };
+  const getCustomersCount = (timeRange) => {
+    axiosPrivate
+      .post(`${REPORT_URL}/customers-count`, timeRange)
+      .then((res) => setReports(res.data))
+      .catch((err) => console.log(err));
+  };
 
-  useEffect(()=>{
-    getProductCount();
-  }, [])
+  const resetReports = () => setReports([]);
+
+  useEffect(() => {
+    if (type === REPORTS.inventoryCustomers) getProductCount();
+  }, []);
 
   return {
     reports,
@@ -44,6 +52,8 @@ const useReports = () => {
     getOrderCount,
     getSalesCount,
     getProfitsCount,
+    getCustomersCount,
+    resetReports,
   };
 };
 

@@ -1,8 +1,6 @@
-import { REPORTS } from "../../App";
-import useReports from "../../hooks/useReports";
+import { formatterPrice } from "../../../utils/priceFormatter";
 
-export default function InventoryTop() {
-  const { reports } = useReports(REPORTS.inventoryCustomers);
+export default function TopProfits({ reports }) {
   return (
     <table className="table-fixed w-full">
       <thead>
@@ -12,7 +10,10 @@ export default function InventoryTop() {
             Usuario
           </th>
           <th className="font-bold w-3/6 border-b border-gray-200 py-4">
-            Productos a la venta
+            Ganancias para el usuario
+          </th>
+          <th className="font-bold w-3/6 border-b border-gray-200 py-4">
+            Ganancias para la empresa
           </th>
         </tr>
       </thead>
@@ -22,9 +23,14 @@ export default function InventoryTop() {
             <td className="font-bold text-center border-b border-gray-200 py-4">
               {index + 1}
             </td>
-            <td className="text-gray-500 border-b border-gray-200 py-4">{`${report.firstname} ${report.lastname}`}</td>
+            <td className="text-gray-500 border-b border-gray-200 py-4">
+              {`${report.firstname} ${report.lastname}`}
+            </td>
             <td className="text-gray-500 text-center border-b border-gray-200 py-4">
-              {report.productCount}
+            {formatterPrice.format(report.userProfit)}
+            </td>
+            <td className="text-gray-500 text-center border-b border-gray-200 py-4">
+            {formatterPrice.format(report.companyProfit)}
             </td>
           </tr>
         ))}

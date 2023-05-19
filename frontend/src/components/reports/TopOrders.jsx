@@ -1,8 +1,4 @@
-import { REPORTS } from "../../App";
-import useReports from "../../hooks/useReports";
-
-export default function InventoryTop() {
-  const { reports } = useReports(REPORTS.inventoryCustomers);
+export default function TopOrders({ reports }) {
   return (
     <table className="table-fixed w-full">
       <thead>
@@ -12,7 +8,7 @@ export default function InventoryTop() {
             Usuario
           </th>
           <th className="font-bold w-3/6 border-b border-gray-200 py-4">
-            Productos a la venta
+            Pedidos realizados
           </th>
         </tr>
       </thead>
@@ -22,9 +18,11 @@ export default function InventoryTop() {
             <td className="font-bold text-center border-b border-gray-200 py-4">
               {index + 1}
             </td>
-            <td className="text-gray-500 border-b border-gray-200 py-4">{`${report.firstname} ${report.lastname}`}</td>
+            <td className="text-gray-500 border-b border-gray-200 py-4">
+              {`${report.firstname} ${report.lastname}`}
+            </td>
             <td className="text-gray-500 text-center border-b border-gray-200 py-4">
-              {report.productCount}
+              {report.orderCount}
             </td>
           </tr>
         ))}

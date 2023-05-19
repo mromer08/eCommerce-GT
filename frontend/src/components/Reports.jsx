@@ -2,14 +2,19 @@ import { useForm } from "react-hook-form";
 import useReports from "../hooks/useReports";
 import { REPORTS } from "../App";
 import InventoryTop from "./reports/InventoryTop";
+import TopSoldProducts from "./reports/TopSoldProducts";
+import TopCustomerProducts from "./reports/TopCustomerProducts";
+import TopProfits from "./reports/TopProfits";
+import TopOrders from "./reports/TopOrders";
 
 export default function Reports({ type }) {
   const {
     reports,
     getSalesCount,
     getOrderCount,
-    getProductCount,
     getProfitsCount,
+    getCustomersCount,
+    resetReports,
   } = useReports();
 
   const {
@@ -30,9 +35,17 @@ export default function Reports({ type }) {
     "Top de clientes que más pedidos han hecho",
     "Top de clientes con más inventario",
   ];
-  const onSubmit = () => {
-    if (type === REPORTS.inventoryCustomers) {
+  const onSubmit = (data) => {
+    if (type === REPORTS.topSales) {
+      getSalesCount(data);
+    } else if (type === REPORTS.topCustomers) {
+      getProfitsCount(data);
+    } else if (type === REPORTS.featuredCustomers) {
+      getCustomersCount(data);
+    } else if (type === REPORTS.activeCustomers) {
+      getOrderCount(data);
     }
+    resetReports();
   };
 
   return (
@@ -87,15 +100,15 @@ export default function Reports({ type }) {
       )}
 
       {type === REPORTS.activeCustomers ? (
-        <></>
+        <TopOrders reports={reports} />
       ) : type === REPORTS.featuredCustomers ? (
-        <></>
+        <TopCustomerProducts reports={reports} />
       ) : type === REPORTS.topSales ? (
-        <></>
+        <TopSoldProducts reports={reports} />
       ) : type === REPORTS.topCustomers ? (
-        <></>
+        <TopProfits reports={reports} />
       ) : (
-        <InventoryTop reports={reports} />
+        <InventoryTop />
       )}
     </div>
   );

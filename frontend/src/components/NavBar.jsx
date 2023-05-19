@@ -12,7 +12,7 @@ import { ROLES } from "../App";
 
 let navigation = [];
 const reportsNavigation = [
-  { name: "Top Ventas", to: "/report/top-sales" },
+  { name: "Top productos vendidos", to: "/report/top-sales" },
   { name: "Clientes Ganadores", to: "/report/top-customers" },
   { name: "Clientes Destacados", to: "/report/featured-customers" },
   { name: "Clientes Más Activos", to: "/report/active-customers" },
