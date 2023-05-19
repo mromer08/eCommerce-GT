@@ -68,7 +68,7 @@ const getCountProducts = async (req, res) => {
         productCount: user.productCount,
       };
     });
-    console.log(response)
+    console.log(response);
     res.json(response);
   } catch (error) {
     console.error(error);
@@ -189,84 +189,147 @@ const getTopSoldProducts = async (req, res) => {
 };
 
 const getTopCustomersByProfit = async (req, res) => {
-    const { startDate, endDate } = req.body;
-  
-    try {
-      const result = await Sale.aggregate([
-        {
-          $match: {
-            date: {
-              $gte: new Date(startDate),
-              $lte: new Date(new Date(endDate).setHours(23, 59, 59, 999)),
-            },
+  const { startDate, endDate } = req.body;
+  if (!startDate || !endDate) {
+    return res.status(400).json({ message: "Date range is required" });
+  }
+  try {
+    const result = await Sale.aggregate([
+      {
+        $match: {
+          date: {
+            $gte: new Date(startDate),
+            $lte: new Date(endDate + "T23:59:59.999Z"),
           },
         },
-        {
-          $unwind: "$products",
+      },
+      {
+        $unwind: "$products",
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "products.product",
+          foreignField: "_id",
+          as: "product",
         },
-        {
-          $lookup: {
-            from: "products",
-            localField: "products.product",
-            foreignField: "_id",
-            as: "product",
+      },
+      {
+        $unwind: "$product",
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "product.user",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+      {
+        $unwind: "$user",
+      },
+      {
+        $group: {
+          _id: "$user",
+          profit: {
+            $sum: { $multiply: ["$products.quantity", "$product.price"] },
           },
         },
-        {
-          $unwind: "$product",
+      },
+      {
+        $project: {
+          _id: 0,
+          firstname: "$_id.firstname",
+          lastname: "$_id.lastname",
+          profit: 1,
         },
-        {
-          $lookup: {
-            from: "users",
-            localField: "user",
-            foreignField: "_id",
-            as: "user",
-          },
-        },
-        {
-          $unwind: "$user",
-        },
-        {
-          $group: {
-            _id: "$user",
-            profit: {
-              $sum: { $multiply: ["$products.quantity", "$product.price"] },
-            },
-          },
-        },
-        {
-          $project: {
-            _id: 0,
-            firstname: "$_id.firstname",
-            lastname: "$_id.lastname",
-            profit: 1,
-          },
-        },
-        {
-          $sort: { profit: -1 },
-        },
-        {
-          $limit: 5,
-        },
-      ]);
-      const response = result.map(item => {
-        return {
-            firstname: item.firstname,
-            lastname: item.lastname,
-            userProfit: item.profit * 0.95,
-            companyProfit: item.profit * 0.05,
+      },
+      {
+        $sort: { profit: -1 },
+      },
+      {
+        $limit: 5,
+      },
+    ]);
+
+    const response = result.map((item) => {
+      return {
+        firstname: item.firstname,
+        lastname: item.lastname,
+        userProfit: item.profit * 0.95,
+        companyProfit: item.profit * 0.05,
+      };
+    });
+
+    res.json(response);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "Error al obtener los clientes con más ganancias" });
+  }
+};
+
+
+const getTopCustomersByProductSold = async (req, res) => {
+  const { startDate, endDate } = req.body;
+  if (!startDate || !endDate) {
+    return res.status(400).json({ message: "Date range is required" });
+  }
+
+  try {
+    const sales = await Sale.find({
+      date: {
+        $gte: new Date(startDate),
+        $lte: new Date(endDate + "T23:59:59.999Z"),
+      },
+    }).populate({
+      path: "products.product",
+      populate: {
+        path: "user",
+        select: "firstname lastname",
+      },
+    });
+
+    const customerSales = {};
+
+    sales.forEach((sale) => {
+      sale.products.forEach((product) => {
+        const userId = product.product.user.toString();
+
+        if (customerSales[userId]) {
+          customerSales[userId].countSale += product.quantity;
+        } else {
+          console.log(product)
+          const { firstname, lastname } = product.product.user;
+          customerSales[userId] = {
+            firstname,
+            lastname,
+            countSale: product.quantity,
+          };
         }
-      })
-      res.json(response);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "Error al obtener los clientes con más ganancias" });
-    }
-  };
+      });
+    });
+
+    console.log(customerSales)
+
+    const sortedCustomers = Object.values(customerSales).sort(
+      (a, b) => b.countSale - a.countSale
+    );
+
+    const topCustomers = sortedCustomers.slice(0, 5);
+
+    res.json(topCustomers);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 module.exports = {
   getCountProducts,
   getTopCustomers,
   getTopSoldProducts,
   getTopCustomersByProfit,
+  getTopCustomersByProductSold,
 };

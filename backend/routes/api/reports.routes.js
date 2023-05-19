@@ -8,4 +8,5 @@ router.get("/products-count",verifyRoles(ROLES_LIST.Admin), reportsController.ge
 router.post("/orders-count",verifyRoles(ROLES_LIST.Admin), reportsController.getTopCustomers);
 router.post("/sales-count",verifyRoles(ROLES_LIST.Admin), reportsController.getTopSoldProducts);
 router.post("/profits-count",verifyRoles(ROLES_LIST.Admin), reportsController.getTopCustomersByProfit);
+router.post("/customers-count",verifyRoles(ROLES_LIST.Admin), reportsController.getTopCustomersByProductSold);
 module.exports = router;
