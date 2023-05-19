@@ -51,6 +51,7 @@ app.use('/api/users', require('./routes/api/users.routes'));
 app.use('/api/cards', require('./routes/api/creditCards.routes'));
 app.use('/api/sales', require('./routes/api/sales.routes'));
 app.use('/api/orders', require('./routes/api/orders.routes'));
+app.use('/api/reports', require('./routes/api/reports.routes'));
 
 app.all('*', (req, res) => {
     res.status(404);
