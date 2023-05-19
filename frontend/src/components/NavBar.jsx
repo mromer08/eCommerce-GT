@@ -11,6 +11,13 @@ import ShoppingCart from "./ShoppingCart";
 import { ROLES } from "../App";
 
 let navigation = [];
+const reportsNavigation = [
+  { name: "Top Ventas", to: "/report/top-sales" },
+  { name: "Clientes Ganadores", to: "/report/top-customers" },
+  { name: "Clientes Destacados", to: "/report/featured-customers" },
+  { name: "Clientes Más Activos", to: "/report/active-customers" },
+  { name: "Clientes con Más Inventario", to: "/report/inventory-customers" },
+];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -20,42 +27,46 @@ export default function NavBar() {
   const { auth, setAuth } = useContext(AuthContext);
   const navigate = useNavigate();
   if (auth?.roles?.includes(ROLES.Admin)) {
-    navigation = []
+    navigation = [];
     navigation.push(
       { name: "Crear Usuario", href: "/new-employee", current: false },
-      { name: "Usuarios", href: "/users", current: false },
-      { name: "Reportes", href: "#", current: false },
+      { name: "Usuarios", href: "/users", current: false }
     );
-  }else
-  if (auth?.roles?.includes(ROLES.Delivery)) {
-    navigation = []
+  } else if (auth?.roles?.includes(ROLES.Delivery)) {
+    navigation = [];
     // Opción adicional para el rol de entrega
-    navigation.push({
-      name: "Productos",
-      href: "/",
-      current: false,
-    }, {
-      name: "Pedidos",
-      href: "/orders",
-      current: false,
-    });
-  }else
-  if (auth?.roles?.includes(ROLES.User)) {
-    navigation = []
+    navigation.push(
+      {
+        name: "Productos",
+        href: "/",
+        current: false,
+      },
+      {
+        name: "Pedidos",
+        href: "/orders",
+        current: false,
+      }
+    );
+  } else if (auth?.roles?.includes(ROLES.User)) {
+    navigation = [];
     // Opción adicional para el rol de entrega
-    navigation.push({
-      name: "Nuevo Producto",
-      href: "/product-form",
-      current: false,
-    },{
-      name: "Mis Productos",
-      href: "/profile/products",
-      current: false,
-    }, {
-      name: "Mis Pedidos",
-      href: "/orders",
-      current: false,
-    });
+    navigation.push(
+      {
+        name: "Nuevo Producto",
+        href: "/product-form",
+        current: false,
+      },
+      {
+        name: "Mis Productos",
+        href: "/profile/products",
+        current: false,
+      },
+      {
+        name: "Mis Pedidos",
+        href: "/orders",
+        current: false,
+      }
+    );
   }
 
   const logout = async () => {
@@ -63,7 +74,7 @@ export default function NavBar() {
     // axios to /logout endpoint
     setAuth({});
     navigate("/");
-    navigation = []
+    navigation = [];
   };
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -115,6 +126,44 @@ export default function NavBar() {
                         {item.name}
                       </Link>
                     ))}
+
+                    {auth?.roles?.includes(ROLES.Admin) && (
+                      <Menu as="div" className="relative ml-3">
+                        <div>
+                          <Menu.Button className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                            <span className="sr-only">Open user menu</span>
+                            Reportes
+                          </Menu.Button>
+                        </div>
+                        <Transition
+                          as={Fragment}
+                          enter="transition ease-out duration-100"
+                          enterFrom="transform opacity-0 scale-95"
+                          enterTo="transform opacity-100 scale-100"
+                          leave="transition ease-in duration-75"
+                          leaveFrom="transform opacity-100 scale-100"
+                          leaveTo="transform opacity-0 scale-95"
+                        >
+                          <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            {reportsNavigation.map((item) => (
+                              <Menu.Item>
+                                {({ active }) => (
+                                  <Link
+                                    to={item.to}
+                                    className={classNames(
+                                      active ? "bg-gray-100" : "",
+                                      "block px-4 py-2 text-sm text-gray-700"
+                                    )}
+                                  >
+                                    {item.name}
+                                  </Link>
+                                )}
+                              </Menu.Item>
+                            ))}
+                          </Menu.Items>
+                        </Transition>
+                      </Menu>
+                    )}
                   </div>
                 </div>
               </div>

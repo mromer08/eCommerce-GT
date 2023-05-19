@@ -68,7 +68,7 @@ const getCountProducts = async (req, res) => {
         productCount: user.productCount,
       };
     });
-
+    console.log(response)
     res.json(response);
   } catch (error) {
     console.error(error);
