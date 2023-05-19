@@ -44,6 +44,7 @@ const useReports = (type) => {
 
   useEffect(() => {
     if (type === REPORTS.inventoryCustomers) getProductCount();
+    else resetReports();
   }, []);
 
   return {

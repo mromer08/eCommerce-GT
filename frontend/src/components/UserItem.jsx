@@ -1,6 +1,6 @@
-import { TrashIcon, TruckIcon } from "@heroicons/react/20/solid";
+import { PencilSquareIcon, TrashIcon } from "@heroicons/react/20/solid";
 
-export default function UserItem({ user, deleteUser }) {
+export default function UserItem({ user, deleteUser, setEdit }) {
   const role = user.roles.Admin
     ? "Admin"
     : user.roles.Delivery
@@ -16,12 +16,20 @@ export default function UserItem({ user, deleteUser }) {
         <div className="text-lg font-medium text-gray-900">
           {`${user.firstname} ${user.lastname}`}
         </div>
-        <button
-          onClick={() => deleteUser({ id: user._id })}
-          className="items-center justify-center rounded-md border border-transparent bg-rose-600 p-1 text-base font-medium text-white hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2"
-        >
-          <TrashIcon className="w-6 flex-shrink-0" />
-        </button>
+        <div className="space-x-1">
+          <button
+            className="items-center justify-center rounded-md border border-transparent bg-indigo-600 p-1 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            onClick={() => setEdit(user)}
+          >
+            <PencilSquareIcon className="w-6 flex-shrink-0" />
+          </button>
+          <button
+            onClick={() => deleteUser({ id: user._id })}
+            className="items-center justify-center rounded-md border border-transparent bg-rose-600 p-1 text-base font-medium text-white hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2"
+          >
+            <TrashIcon className="w-6 flex-shrink-0" />
+          </button>
+        </div>
       </div>
     </div>
   );

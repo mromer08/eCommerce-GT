@@ -14,7 +14,6 @@ const useUsers = () => {
   };
 
   const createNewUser = (user) => {
-    console.log(user);
     axiosPrivate
       .post(USERS_URL, user)
       .then((res) => {
@@ -24,11 +23,24 @@ const useUsers = () => {
       .catch((error) => {
         console.log(error);
       });
-  }
+  };
+
+  const updateUser = (user) => {
+    console.log(user);
+    axiosPrivate
+      .put(USERS_URL, user)
+      .then((res) => {
+        getAllUsers();
+        return res.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const deleteUser = async (id) => {
     axiosPrivate
-      .delete(USERS_URL, {data: id })
+      .delete(USERS_URL, { data: id })
       .then((res) => {
         getAllUsers();
         return res.data;
@@ -45,7 +57,9 @@ const useUsers = () => {
   return {
     users,
     createNewUser,
-    deleteUser
+    deleteUser,
+    updateUser,
+    getAllUsers,
   };
 };
 

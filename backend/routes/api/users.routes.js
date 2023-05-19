@@ -8,8 +8,8 @@ router
   .route("/")
   .post(verifyRoles(ROLES_LIST.Admin), usersController.createNewUser)
   .get(verifyRoles(ROLES_LIST.Admin), usersController.getAllUsers)
-  .delete(verifyRoles(ROLES_LIST.Admin), usersController.deleteUser);
-  // .put(verifyRoles(ROLES_LIST.User), usersController.updateUser)
+  .delete(verifyRoles(ROLES_LIST.Admin), usersController.deleteUser)
+  .put(verifyRoles(ROLES_LIST.Admin), usersController.updateUser);
 
 router
   .route("/:id")

@@ -1,22 +1,35 @@
 import { useRef, useState, useEffect } from "react";
 import axios from "../api/axios";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ROLES } from "../App";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useAuth from "../hooks/useAuth";
+import useUsers from "../hooks/useUsers";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/; //qwert12345M!
 const REGISTER_URL = "/api/register";
 
-const Register = ({ admin = false }) => {
+const Register = ({
+  admin = false,
+  updateUser,
+  setEdit,
+  edit = {
+    username: "",
+    firstname: "",
+    lastname: "",
+    roles: {},
+  },
+}) => {
   const nameRef = useRef();
   const { auth } = useAuth();
   const navigate = useNavigate();
-  const [user, setUser] = useState("");
+  const [user, setUser] = useState(edit.username);
   const [validName, setValidName] = useState(false);
 
-  const [rol, setRol] = useState(ROLES.Admin);
+  const [rol, setRol] = useState(
+    edit.roles.Admin || edit.roles.Delivery || ROLES.Admin
+  );
   const [pwd, setPwd] = useState("");
   const [validPwd, setValidPwd] = useState(false);
 
@@ -25,8 +38,10 @@ const Register = ({ admin = false }) => {
 
   const [errMsg, setErrMsg] = useState("");
 
-  const [firstname, setFirstName] = useState("");
-  const [lastname, setLastName] = useState("");
+  const [firstname, setFirstName] = useState(edit.firstname);
+  const [lastname, setLastName] = useState(edit.lastname);
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/users";
 
   const axiosPrivate = useAxiosPrivate();
   useEffect(() => {
@@ -79,14 +94,27 @@ const Register = ({ admin = false }) => {
             rolObj[key] = Number(rol);
           }
         }
-        const response = await axiosPrivate.post("/api/users", {
-          username: user,
-          password: pwd,
-          firstname,
-          lastname,
-          roles: rolObj,
-        });
-        console.log(response?.data);
+        if (edit._id) {
+          const response = await updateUser({
+            _id: edit._id,
+            password: pwd.trim().length > 3 ? pwd : false,
+            firstname,
+            lastname,
+            roles: rolObj,
+          });
+          console.log(response?.data);
+          setEdit({});
+        } else {
+          const response = await axiosPrivate.post("/api/users", {
+            username: user,
+            password: pwd,
+            firstname,
+            lastname,
+            roles: rolObj,
+          });
+          console.log(response?.data);
+        }
+        navigate(from, { replace: true });
       }
       // TODO: remove console.logs before deployment
       //console.log(JSON.stringify(response))
@@ -122,9 +150,17 @@ const Register = ({ admin = false }) => {
                     src="gt.png"
                     alt="eCommerce GT"
                   />
-                  <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-                    Crea tu cuenta de <br /> eCommerce GT
-                  </h2>
+                  {admin ? (
+                    <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+                      {edit._id
+                        ? `Editar cuenta de empleado`
+                        : `Nueva cuenta de empleado`}
+                    </h2>
+                  ) : (
+                    <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+                      Crea tu cuenta de <br /> eCommerce GT
+                    </h2>
+                  )}
                 </div>
 
                 <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -184,6 +220,7 @@ const Register = ({ admin = false }) => {
                         autoComplete="off"
                         onChange={(e) => setUser(e.target.value)}
                         value={user}
+                        readOnly={edit._id ? true : false}
                         className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                       />
                     </div>
@@ -255,21 +292,23 @@ const Register = ({ admin = false }) => {
               </div>
               <div>
                 <button className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                  Crear cuenta
+                  {edit._id ? `Editar cuenta` : `Crear cuenta`}
                 </button>
               </div>
             </div>
           </form>
 
-          <p className="mt-10 text-center text-sm text-gray-500">
-            ¿Ya estas registrado?{" "}
-            <Link
-              to="/login"
-              className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
-            >
-              Inicia Sesión
-            </Link>
-          </p>
+          {!admin && (
+            <p className="mt-10 text-center text-sm text-gray-500">
+              ¿Ya estas registrado?{" "}
+              <Link
+                to="/login"
+                className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+              >
+                Inicia Sesión
+              </Link>
+            </p>
+          )}
         </div>
       </section>
       )
