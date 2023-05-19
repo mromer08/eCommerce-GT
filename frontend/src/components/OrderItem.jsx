@@ -17,8 +17,8 @@ export default function OrderItem({ order, updateOrder }) {
   });
 
   const onSubmit = (data) => {
-    console.log(data);
-    reset();
+    data.id = order._id;
+    updateOrder(data);
     setEditDate(false);
   };
   return (
