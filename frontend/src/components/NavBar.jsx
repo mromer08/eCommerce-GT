@@ -236,7 +236,7 @@ export default function NavBar() {
                     </Menu.Items>
                   </Transition>
                 </Menu>
-                <ShoppingCart />
+                {(auth?.roles?.length < 2 && auth?.roles?.includes(ROLES.User)) && <ShoppingCart />}
               </div>
             </div>
           </div>

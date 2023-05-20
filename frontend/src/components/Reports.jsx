@@ -33,7 +33,7 @@ export default function Reports({ type }) {
     "Top de clientes con más ganancias",
     "Top de clientes con más productos vendidos",
     "Top de clientes que más pedidos han hecho",
-    "Top de clientes con más inventario a la venta",
+    "Top de clientes con más productos a la venta",
   ];
   const onSubmit = (data) => {
     if (type === REPORTS.topSales) {

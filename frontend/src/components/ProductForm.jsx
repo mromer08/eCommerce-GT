@@ -11,13 +11,14 @@ function ProductForm({
     description: "",
     amount: 1,
     category: "",
-  }, setEdit
+  },
+  setEdit,
 }) {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
-  const {createNewProduct, updateProduct} = useProducts();
-  const {categories} = useCategories();
+  const { createNewProduct, updateProduct } = useProducts();
+  const { categories } = useCategories();
   const {
     register,
     handleSubmit,
@@ -37,13 +38,11 @@ function ProductForm({
       data.image = data.image[0];
     }
     if (edit._id) {
-      data.id = edit._id
-      updateProduct(data)
-      setEdit({})
-
-    }else{
+      data.id = edit._id;
+      updateProduct(data);
+      setEdit({});
+    } else {
       createNewProduct(data);
-      
     }
     navigate(from, { replace: true });
   };
@@ -72,7 +71,7 @@ function ProductForm({
                     <input
                       id="name"
                       type="text"
-                      {...register("name", {required: true})}
+                      {...register("name", { required: true })}
                       className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
                   </div>
@@ -90,7 +89,7 @@ function ProductForm({
                       id="desciption"
                       name="desciption"
                       rows={3}
-                      {...register("description", {required: true})}
+                      {...register("description", { required: true })}
                       className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
                   </div>
@@ -105,11 +104,22 @@ function ProductForm({
                   </label>
                   <div className="mt-2">
                     <input
-                      type="number"
+                      type="text"
                       id="price"
-                      {...register("price", {required: true})}
+                      {...register("price", {
+                        required: true,
+                        pattern: {
+                          value: /^\d+(\.\d{1,2})?$/, // Expresión regular para validar números con hasta 2 decimales
+                          message: "Por favor, ingresa un precio válido",
+                        },
+                      })}
                       className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
+                    {errors.price && (
+                      <span className="text-red-500 text-sm mt-1">
+                        {errors.price.message}
+                      </span>
+                    )}
                   </div>
                 </div>
 
@@ -124,7 +134,7 @@ function ProductForm({
                     <input
                       type="number"
                       id="amount"
-                      {...register("amount", {required: true})}
+                      {...register("amount", { required: true })}
                       className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
                   </div>
@@ -140,53 +150,54 @@ function ProductForm({
                   <div className="mt-2">
                     <select
                       id="tag"
-                      {...register("category", {required: true})}
+                      {...register("category", { required: true })}
                       className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                     >
-                      {categories.map(category => 
-                        <option key={category._id} value={category._id}>{category.name}</option>
-
-                      )}
+                      {categories.map((category) => (
+                        <option key={category._id} value={category._id}>
+                          {category.name}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </div>
-                
+
                 {edit.image ? (
                   <div className="col-span-full">
                     <img src={`${BASE_URL}/${edit.image}`} alt={edit.name} />
                   </div>
-                ): (
-                                  <div className="col-span-full">
-                                  <label
-                                    htmlFor="cover-photo"
-                                    className="block text-sm font-medium leading-6 text-gray-900"
-                                  >
-                                    Imágen
-                                  </label>
-                                  <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                                    <div className="text-center">
-                                      <PhotoIcon
-                                        className="mx-auto h-12 w-12 text-gray-300"
-                                        aria-hidden="true"
-                                      />
-                                      <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                                        <label
-                                          htmlFor="image"
-                                          className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
-                                        >
-                                          <input
-                                            id="image"
-                                            type="file"
-                                            {...register("image")}
-                                          />
-                                        </label>
-                                      </div>
-                                      <p className="text-xs leading-5 text-gray-600">
-                                        PNG, JPG, GIF hasta 1MB
-                                      </p>
-                                    </div>
-                                  </div>
-                                </div>
+                ) : (
+                  <div className="col-span-full">
+                    <label
+                      htmlFor="cover-photo"
+                      className="block text-sm font-medium leading-6 text-gray-900"
+                    >
+                      Imágen
+                    </label>
+                    <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+                      <div className="text-center">
+                        <PhotoIcon
+                          className="mx-auto h-12 w-12 text-gray-300"
+                          aria-hidden="true"
+                        />
+                        <div className="mt-4 flex text-sm leading-6 text-gray-600">
+                          <label
+                            htmlFor="image"
+                            className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                          >
+                            <input
+                              id="image"
+                              type="file"
+                              {...register("image")}
+                            />
+                          </label>
+                        </div>
+                        <p className="text-xs leading-5 text-gray-600">
+                          PNG, JPG, GIF hasta 1MB
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 )}
               </div>
             </div>

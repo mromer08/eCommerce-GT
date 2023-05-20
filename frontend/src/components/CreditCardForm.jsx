@@ -1,13 +1,15 @@
 import { useForm } from "react-hook-form";
 
-function CreditCardForm({createNewCard}) {
+function CreditCardForm({ createNewCard }) {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
   const onSubmit = (data) => {
-    // console.log(data)
+    const [month, year] = data.expirationDate.split("/");
+    const expirationDate = new Date(`20${year}`, Number(month) - 1, 1);
+    data.expirationDate = expirationDate;
     createNewCard(data);
   };
 
@@ -31,7 +33,7 @@ function CreditCardForm({createNewCard}) {
                       type="text"
                       {...register("number", {
                         required: true,
-                        pattern: /^\d{16}$/
+                        pattern: /^\d{16}$/,
                       })}
                       placeholder="0000 0000 0000 0000"
                       className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -48,12 +50,24 @@ function CreditCardForm({createNewCard}) {
                   </label>
                   <div className="mt-2">
                     <input
-                      type="date"
+                      type="text"
                       id="expirationDate"
-                      {...register("expirationDate")}
+                      {...register("expirationDate", {
+                        required: true,
+                        pattern: {
+                          value: /^(0[1-9]|1[0-2])\/\d{2}$/,
+                          message:
+                            "Ingrese una fecha de expiración válida en formato MM/YY",
+                        },
+                      })}
                       placeholder="MM/YY"
                       className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
+                    {errors.expirationDate && (
+                      <p className="mt-2 text-xs text-red-500">
+                        {errors.expirationDate.message}
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -62,13 +76,13 @@ function CreditCardForm({createNewCard}) {
                     htmlFor="cvcCode"
                     className="block text-sm font-medium leading-6 text-gray-900"
                   >
-                    Cantidad
+                    CVC
                   </label>
                   <div className="mt-2">
                     <input
                       type="text"
                       id="cvcCode"
-                      {...register("cvcCode", {required: true})}
+                      {...register("cvcCode", { required: true })}
                       placeholder="000"
                       className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
@@ -86,18 +100,16 @@ function CreditCardForm({createNewCard}) {
                     <input
                       id="holderName"
                       type="text"
-                      {...register("holderName", {required: true})}
+                      {...register("holderName", { required: true })}
                       placeholder="Como aparece en la tarjeta"
                       className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
                   </div>
                 </div>
-
               </div>
             </div>
             <div>
-              <button 
-              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+              <button className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                 Aceptar
               </button>
             </div>
