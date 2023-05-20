@@ -1,6 +1,10 @@
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { XMarkIcon, ShoppingCartIcon, TrashIcon } from "@heroicons/react/24/outline";
+import {
+  XMarkIcon,
+  ShoppingCartIcon,
+  TrashIcon,
+} from "@heroicons/react/24/outline";
 import { useCart } from "../hooks/useCart";
 import { Link } from "react-router-dom";
 import { formatterPrice } from "../../utils/priceFormatter";
@@ -98,14 +102,16 @@ export default function ShoppingCart() {
                                     <div className="flex flex-1 items-end justify-between text-sm">
                                       <div className="flex space-x-3 text-gray-500">
                                         <button
-                                        onClick={() => subFromCart(product)}
-                                        className="bg-indigo-100 rounded-full h-6 w-6 flex items-center justify-center">
+                                          onClick={() => subFromCart(product)}
+                                          className="bg-indigo-100 rounded-full h-6 w-6 flex items-center justify-center"
+                                        >
                                           -
                                         </button>
                                         <p>{product.quantity}</p>
-                                        <button 
-                                        onClick={() => addToCart(product)}
-                                        className="bg-indigo-100 rounded-full h-6 w-6 flex items-center justify-center">
+                                        <button
+                                          onClick={() => addToCart(product)}
+                                          className="bg-indigo-100 rounded-full h-6 w-6 flex items-center justify-center"
+                                        >
                                           +
                                         </button>
                                       </div>
@@ -118,7 +124,7 @@ export default function ShoppingCart() {
                                           }
                                           className="font-medium text-indigo-600 hover:text-indigo-500"
                                         >
-                                          <TrashIcon className="h-6 w-6"/>
+                                          <TrashIcon className="h-6 w-6" />
                                         </button>
                                       </div>
                                     </div>
@@ -142,9 +148,16 @@ export default function ShoppingCart() {
                             )}
                           </p>
                         </div>
-                        <div className="mt-6">
+                        <div className="mt-6 space-y-2">
+                          <button
+                            onClick={() => clearCart()}
+                            className="flex w-full items-center justify-center rounded-md border border-transparent bg-rose-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-rose-700"
+                          >
+                            <TrashIcon className="w-6 flex-shrink-0" />
+                            Vaciar carrito
+                          </button>
                           <Link
-                            to={cart.length > 0 ? '/cards' : '/'}
+                            to={cart.length > 0 ? "/cards" : "/"}
                             className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
                           >
                             Ir a Pago
